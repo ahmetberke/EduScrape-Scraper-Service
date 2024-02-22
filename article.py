@@ -1,3 +1,5 @@
+import json
+
 class Article:
   def __init__(self,
                 name : str = "", 
@@ -28,3 +30,6 @@ class Article:
     self.url = url
 
     pass
+
+  def JSON(self):
+    return json.dumps(self.__dict__).encode('utf8')
