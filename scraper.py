@@ -46,10 +46,5 @@ class Scraper():
       
       articleList.append(detailedArticle)
     
-    article_jsons = []
-    for article in articleList:
-      article_jsons.append(article.__dict__)
-
-    f = open("output.json", "w", encoding="utf-8")
-    f.write(json.dumps(article_jsons, ensure_ascii=False))
+    return articleList
     

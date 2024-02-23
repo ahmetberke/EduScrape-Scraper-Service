@@ -1,7 +1,18 @@
-import requests
-from bs4 import BeautifulSoup
+from typing import Union
+from fastapi import FastAPI
+
 from scraper import Scraper
 
-if __name__ == "__main__":
-  scrapper = Scraper()
-  scrapper.scrap("makine öğrenmesi")
+app = FastAPI()
+
+scraper = Scraper()
+
+@app.get("/article")
+def read_article(search : Union[str, None] = None):
+  
+  if (search == ""):
+    return
+  
+  articles = scraper.scrap(search)
+
+  return articles
