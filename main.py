@@ -11,7 +11,7 @@ scraper = Scraper()
 def read_article(search : Union[str, None] = None):
   
   if (search == ""):
-    return
+    return []
   
   articles = scraper.scrap(search)
 

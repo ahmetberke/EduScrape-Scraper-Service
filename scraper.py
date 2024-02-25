@@ -27,7 +27,7 @@ class Scraper():
 
     articleList : list[Article] = []
 
-    response = requests.get(self.searchURL + word.replace(" ", "+"))
+    response = requests.get(self.searchURL + word)
     instance = BeautifulSoup(response.text, "html.parser")
     
     article_htmls = instance.find_all(class_="gs_r gs_or gs_scl")
@@ -36,10 +36,16 @@ class Scraper():
 
       # Google Scholarda bulunan tüm özellikleri ata
       newArticle.name = article_html.find("h3").text
-      newArticle.citationsNumber = int(article_html.find(class_="gs_fl gs_flb").find_all("a")[2].text.split(" ")[2])
+
+      ct_field = article_html.find(class_="gs_fl gs_flb").find("a", string=lambda tag: tag and tag.text.startswith("Alıntılanma"))
+      newArticle.citationsNumber = int(ct_field.text.split(" ")[2] if ct_field and len(ct_field.text.split(" ")) > 2 else 0)
+
       newArticle.authors = list(map(lambda tag: tag.text, article_html.find(class_="gs_a").find_all("a")))
       url_tag = article_html.find("h3").find("a", href=True)
       newArticle.url = url_tag["href"] if url_tag != None else ""
+
+      summary_tag = article_html.find(class_="gs_rs")
+      newArticle.summary = summary_tag.text if summary_tag else ""
 
       # Google Scholar'dan gelen article linkin strategy managareine gönder
       detailedArticle = self.scrape_detail(newArticle)

@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from article import Article
 from strategy import Strategy
+import time
+import datetime
 
 class DergiParkStrategy(Strategy):
 
@@ -29,26 +31,18 @@ class DergiParkStrategy(Strategy):
     references_div = soup.find("div", class_="article-citations data-section")
     if references_div:
       article.references = list(map(lambda tag: tag.text, references_div.find_all("li")))
-
-    publication_date_title = soup.find("th", string="Publication Date")
-    if publication_date_title:
-      publication_date_value = publication_date_title.parent.find("td")
-      article.publishedDate = publication_date_value.text if publication_date_value else ""
+    
+    #publication_date_title = soup.find("th", string="Publication Date")
+    #if publication_date_title:
+    #  publication_date_value = publication_date_title.parent.find("td")
+    #  pdate = publication_date_value.text if publication_date_value else ""
+    #  article.publishedDate = time.mktime(datetime.datetime.strptime())
+      
+    subtitle = soup.find(class_="article-subtitle")
+    if subtitle:
+      article.publishedDate = int(time.mktime(datetime.datetime.strptime(
+        subtitle.text.replace(" ", "").replace("\n", "")[-10:len(subtitle.text)], 
+        "%d.%m.%Y").timetuple()))
 
 
     return article
-
-    return Article(
-      name="",
-      authors=[],
-      type="",
-      publishedDate="",
-      publisherName="",
-      browserKeyWords="",
-      articleKeyWords="",
-      summary="",
-      references="",
-      citationsNumber=0,
-      doi="",
-      url=""
-    )
