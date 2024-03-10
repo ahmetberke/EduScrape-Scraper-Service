@@ -44,5 +44,4 @@ class DergiParkStrategy(Strategy):
         subtitle.text.replace(" ", "").replace("\n", "")[-10:len(subtitle.text)], 
         "%d.%m.%Y").timetuple()))
 
-
     return article

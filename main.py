@@ -16,3 +16,14 @@ def read_article(search : Union[str, None] = None):
   articles = scraper.scrap(search)
 
   return articles
+
+@app.get("/word-check")
+def read_article(word : Union[str, None] = None):
+
+  res = scraper.correctWord(word)
+  print(res)
+
+  return {
+    "correctWord" : res[0],
+    "isCorrect" : res[1] 
+  }
